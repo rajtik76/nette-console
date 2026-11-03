@@ -44,7 +44,21 @@ Commands
 |---|---|
 | `make:command <Name>` | Creates `App\Console\<Name>Command`. `Mail/Report` → `App\Console\Mail\ReportCommand`, terminal name `app:report` (`--command` to override, `--force` to overwrite). |
 | `package:discover` | Lists extensions registered by discovery. |
-| `cache:clear` | Deletes `temp/cache` (DI container, Latte, ...). |
+| `cache:clear` | Deletes files in `temp/cache` (DI container, Latte, ...). |
+
+Commands extend `Rajtik\Console\Command\Command` and return an `ExitCode` from `handle()`;
+the process exits with its numeric value (`Success` = 0, `Failure` = 1, `Invalid` = 2):
+
+```php
+#[AsCommand(name: 'app:send-report')]
+final class SendReportCommand extends Command
+{
+	protected function handle(InputInterface $input, OutputInterface $output): ExitCode
+	{
+		return ExitCode::Success;
+	}
+}
+```
 
 Any service extending `Symfony\Component\Console\Command\Command` is a command. Register
 generated commands through `search` in `services.neon`:

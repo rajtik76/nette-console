@@ -5,7 +5,6 @@ namespace Rajtik\Console\Command;
 use Rajtik\Console\Cache\TempCache;
 use Rajtik\Console\Generator\FileExistsException;
 use Rajtik\Console\Generator\FileGenerator;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -23,7 +22,7 @@ abstract class GeneratorCommand extends Command
 	}
 
 
-	abstract protected function stubName(): string;
+	abstract protected function stubName(InputInterface $input): string;
 
 
 	abstract protected function defaultStubDirectory(): string;
@@ -43,36 +42,37 @@ abstract class GeneratorCommand extends Command
 	}
 
 
-	protected function execute(InputInterface $input, OutputInterface $output): int
+	protected function handle(InputInterface $input, OutputInterface $output): ExitCode
 	{
 		$name = (string) $input->getArgument('name');
 
 		try {
 			$target = $this->targetFile($name, $input);
 			$this->generator->generate(
-				$this->stubFile(),
+				$this->stubFile($input),
 				$target,
 				$this->replacements($name, $input),
 				(bool) $input->getOption('force'),
 			);
 		} catch (FileExistsException | \InvalidArgumentException $e) {
 			$output->writeln('<error>' . $e->getMessage() . '</error>');
-			return Command::FAILURE;
+			return ExitCode::Failure;
 		}
 
 		// new classes in `search` directories are picked up only by a recompiled container
 		$this->cache?->clearContainer();
 		$output->writeln("<info>Created</info> $target");
-		return Command::SUCCESS;
+		return ExitCode::Success;
 	}
 
 
-	private function stubFile(): string
+	private function stubFile(InputInterface $input): string
 	{
-		$custom = $this->stubDirectory . '/' . $this->stubName();
+		$name = $this->stubName($input);
+		$custom = $this->stubDirectory . '/' . $name;
 
 		return $this->stubDirectory !== null && is_file($custom)
 			? $custom
-			: $this->defaultStubDirectory() . '/' . $this->stubName();
+			: $this->defaultStubDirectory() . '/' . $name;
 	}
 }

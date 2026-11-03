@@ -34,7 +34,7 @@ final class MakeCommandCommand extends GeneratorCommand
 	}
 
 
-	protected function stubName(): string
+	protected function stubName(InputInterface $input): string
 	{
 		return 'command.stub';
 	}

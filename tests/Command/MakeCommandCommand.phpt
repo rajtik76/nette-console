@@ -26,6 +26,8 @@ test('generates command class with derived terminal name', function () {
 	Assert::contains('namespace App\Console\Mail;', $source);
 	Assert::contains("#[AsCommand(name: 'app:send-daily-report'", $source);
 	Assert::contains('final class SendDailyReportCommand extends Command', $source);
+	Assert::contains('use Rajtik\Console\Command\Command;', $source);
+	Assert::contains('return ExitCode::Success;', $source);
 	exec(escapeshellarg(PHP_BINARY) . ' -l ' . escapeshellarg($dir . '/Mail/SendDailyReportCommand.php'), result_code: $lintResult);
 	Assert::same(0, $lintResult);
 });

@@ -4,7 +4,6 @@ namespace Rajtik\Console\Command;
 
 use Rajtik\Console\Cache\TempCache;
 use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -19,10 +18,10 @@ final class CacheClearCommand extends Command
 	}
 
 
-	protected function execute(InputInterface $input, OutputInterface $output): int
+	protected function handle(InputInterface $input, OutputInterface $output): ExitCode
 	{
 		$this->cache->clearAll();
 		$output->writeln('<info>Cache cleared.</info>');
-		return Command::SUCCESS;
+		return ExitCode::Success;
 	}
 }

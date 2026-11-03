@@ -2,8 +2,9 @@
 
 namespace {{ namespace }};
 
+use Rajtik\Console\Command\Command;
+use Rajtik\Console\Command\ExitCode;
 use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -11,8 +12,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name: '{{ command }}', description: '')]
 final class {{ class }} extends Command
 {
-	protected function execute(InputInterface $input, OutputInterface $output): int
+	protected function handle(InputInterface $input, OutputInterface $output): ExitCode
 	{
-		return Command::SUCCESS;
+		return ExitCode::Success;
 	}
 }
