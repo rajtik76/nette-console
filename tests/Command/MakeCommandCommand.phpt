@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
 use Nette\Utils\FileSystem;
+use Rajtik\Console\Command\ExitCode;
 use Rajtik\Console\Command\MakeCommandCommand;
 use Rajtik\Console\Generator\FileGenerator;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tester\Assert;
 
@@ -19,7 +19,7 @@ function createTester(string $dir, ?string $stubs = null): CommandTester
 test('generates command class with derived terminal name', function () {
 	$dir = createTempDir();
 
-	Assert::same(Command::SUCCESS, createTester($dir)->execute(['name' => 'Mail/SendDailyReport']));
+	Assert::same(ExitCode::Success->value, createTester($dir)->execute(['name' => 'Mail/SendDailyReport']));
 
 	$source = FileSystem::read($dir . '/Mail/SendDailyReportCommand.php');
 	Assert::true(str_starts_with($source, "<?php declare(strict_types=1);\n"));
@@ -46,11 +46,11 @@ test('refuses to overwrite unless forced', function () {
 	FileSystem::write($dir . '/PruneCommand.php', 'original');
 
 	$tester = createTester($dir);
-	Assert::same(Command::FAILURE, $tester->execute(['name' => 'Prune']));
+	Assert::same(ExitCode::Failure->value, $tester->execute(['name' => 'Prune']));
 	Assert::contains('already exists', $tester->getDisplay());
 	Assert::same('original', FileSystem::read($dir . '/PruneCommand.php'));
 
-	Assert::same(Command::SUCCESS, $tester->execute(['name' => 'Prune', '--force' => true]));
+	Assert::same(ExitCode::Success->value, $tester->execute(['name' => 'Prune', '--force' => true]));
 	Assert::contains('class PruneCommand', FileSystem::read($dir . '/PruneCommand.php'));
 });
 
@@ -68,6 +68,6 @@ test('application stub overrides package stub', function () {
 test('invalid name fails', function () {
 	$tester = createTester(createTempDir());
 
-	Assert::same(Command::FAILURE, $tester->execute(['name' => 'Foo-Bar']));
+	Assert::same(ExitCode::Failure->value, $tester->execute(['name' => 'Foo-Bar']));
 	Assert::contains('not a valid class name', $tester->getDisplay());
 });
