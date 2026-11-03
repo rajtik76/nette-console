@@ -3,8 +3,10 @@
 namespace Rajtik\Console\Cache;
 
 use Nette\Utils\FileSystem;
+use Nette\Utils\Finder;
 
 
+// Deletes files but keeps directories, because RobotLoader of the running process writes its cache on shutdown
 final readonly class TempCache
 {
 	private const string ContainerDirectory = 'nette.configurator';
@@ -18,12 +20,24 @@ final readonly class TempCache
 
 	public function clearContainer(): void
 	{
-		FileSystem::delete($this->cacheDir . '/' . self::ContainerDirectory);
+		$this->deleteFiles($this->cacheDir . '/' . self::ContainerDirectory);
 	}
 
 
 	public function clearAll(): void
 	{
-		FileSystem::delete($this->cacheDir);
+		$this->deleteFiles($this->cacheDir);
+	}
+
+
+	private function deleteFiles(string $directory): void
+	{
+		if (!is_dir($directory)) {
+			return;
+		}
+
+		foreach (Finder::findFiles('*')->from($directory) as $file) {
+			FileSystem::delete($file->getPathname());
+		}
 	}
 }
