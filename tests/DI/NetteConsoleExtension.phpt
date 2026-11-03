@@ -3,6 +3,7 @@
 use Contributte\Console\Application;
 use Contributte\Console\DI\ConsoleExtension;
 use Nette\Bootstrap\Configurator;
+use Rajtik\Console\Application as BannerApplication;
 use Rajtik\Console\DI\NetteConsoleExtension;
 use Tester\Assert;
 
@@ -26,6 +27,15 @@ test('registers commands in console mode', function () {
 	Assert::true($application->has('make:command'));
 	Assert::true($application->has('package:discover'));
 	Assert::true($application->has('cache:clear'));
+});
+
+
+test('replaces the application with the banner one', function () {
+	$application = createContainer(cliMode: true)->getByType(Application::class);
+
+	Assert::type(BannerApplication::class, $application);
+	Assert::contains("|_| |_|\\___|\\__|\\__\\___|", $application->getLongVersion());
+	Assert::match('%A%</>' . "\n" . '                 console', $application->getLongVersion());
 });
 
 

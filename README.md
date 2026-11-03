@@ -36,6 +36,8 @@ exit($container->getByType(Contributte\Console\Application::class)->run());
 
     php nette list
 
+`list` and `--version` print a nette banner; `console: name` and `console: version` set the caption under it.
+
 
 Commands
 --------

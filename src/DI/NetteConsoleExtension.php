@@ -2,9 +2,12 @@
 
 namespace Rajtik\Console\DI;
 
+use Contributte\Console\Application as ContributteApplication;
 use Nette\DI\CompilerExtension;
+use Nette\DI\Definitions\ServiceDefinition;
 use Nette\Schema\Expect;
 use Nette\Schema\Schema;
+use Rajtik\Console\Application;
 use Rajtik\Console\Cache\TempCache;
 use Rajtik\Console\Command\CacheClearCommand;
 use Rajtik\Console\Command\MakeCommandCommand;
@@ -67,5 +70,21 @@ final class NetteConsoleExtension extends CompilerExtension
 				'directory' => $config->commands->directory ?? $builder->parameters['appDir'] . '/Console',
 				'stubDirectory' => $config->stubs,
 			]);
+	}
+
+
+	public function beforeCompile(): void
+	{
+		if (!$this->cliMode) {
+			return;
+		}
+
+		// swap contributte's application for the subclass with the banner, keeping its setup calls
+		$builder = $this->getContainerBuilder();
+		$name = $builder->getByType(ContributteApplication::class);
+		$definition = $name === null ? null : $builder->getDefinition($name);
+		if ($definition instanceof ServiceDefinition && $definition->getEntity() === ContributteApplication::class) {
+			$definition->setCreator(Application::class);
+		}
 	}
 }
