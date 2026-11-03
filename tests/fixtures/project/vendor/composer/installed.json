@@ -1,0 +1,30 @@
+{
+	"packages": [
+		{
+			"name": "acme/greeter",
+			"extra": {
+				"nette": {
+					"extensions": {
+						"greeter": "Rajtik\\Console\\Tests\\fixtures\\GreeterExtension(%debugMode%)"
+					}
+				}
+			}
+		},
+		{
+			"name": "acme/plain",
+			"extra": {}
+		},
+		{
+			"name": "acme/ignored",
+			"extra": {
+				"nette": {
+					"extensions": {
+						"ignored": "Rajtik\\Console\\Tests\\fixtures\\GreeterExtension"
+					}
+				}
+			}
+		}
+	],
+	"dev": true,
+	"dev-package-names": []
+}

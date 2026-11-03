@@ -1,0 +1,8 @@
+{
+	"name": "acme/project",
+	"extra": {
+		"nette": {
+			"dont-discover": ["acme/ignored"]
+		}
+	}
+}
