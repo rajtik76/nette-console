@@ -50,6 +50,12 @@ Commands extend `Rajtik\Console\Command\Command` and return an `ExitCode` from `
 the process exits with its numeric value (`Success` = 0, `Failure` = 1, `Invalid` = 2):
 
 ```php
+use Rajtik\Console\Command\Command;
+use Rajtik\Console\Command\ExitCode;
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
 #[AsCommand(name: 'app:send-report')]
 final class SendReportCommand extends Command
 {
@@ -91,13 +97,13 @@ A package declares its extensions in `composer.json` using NEON entity syntax:
 - Two packages claiming the same name fail the compilation.
 - Opt out in the root `composer.json`:
 
-```json
-"extra": {
-    "nette": {
-        "dont-discover": ["acme/migrations"]
-    }
-}
-```
+  ```json
+  "extra": {
+      "nette": {
+          "dont-discover": ["acme/migrations"]
+      }
+  }
+  ```
 
 `"*"` disables discovery entirely.
 
