@@ -11,7 +11,7 @@ Artisan-like console for [Nette](https://nette.org):
 Installation
 ------------
 
-	composer require rajtik76/nette-console
+    composer require rajtik76/nette-console
 
 Attach discovery in `Bootstrap`, before the container is created:
 
@@ -34,7 +34,7 @@ $container = (new App\Bootstrap)->bootConsoleApplication(debugMode: getenv('NETT
 exit($container->getByType(Contributte\Console\Application::class)->run());
 ```
 
-	php nette list
+    php nette list
 
 
 Commands
@@ -53,10 +53,10 @@ the process exits with its numeric value (`Success` = 0, `Failure` = 1, `Invalid
 #[AsCommand(name: 'app:send-report')]
 final class SendReportCommand extends Command
 {
-	protected function handle(InputInterface $input, OutputInterface $output): ExitCode
-	{
-		return ExitCode::Success;
-	}
+    protected function handle(InputInterface $input, OutputInterface $output): ExitCode
+    {
+        return ExitCode::Success;
+    }
 }
 ```
 
@@ -65,9 +65,9 @@ generated commands through `search` in `services.neon`:
 
 ```neon
 search:
-	-	in: %appDir%
-		classes:
-			- *Command
+    - in: %appDir%
+      classes:
+        - *Command
 ```
 
 
@@ -78,11 +78,11 @@ A package declares its extensions in `composer.json` using NEON entity syntax:
 
 ```json
 "extra": {
-	"nette": {
-		"extensions": {
-			"migrations": "Acme\\Migrations\\DI\\MigrationsExtension(%consoleMode%)"
-		}
-	}
+    "nette": {
+        "extensions": {
+            "migrations": "Acme\\Migrations\\DI\\MigrationsExtension(%consoleMode%)"
+        }
+    }
 }
 ```
 
@@ -93,9 +93,9 @@ A package declares its extensions in `composer.json` using NEON entity syntax:
 
 ```json
 "extra": {
-	"nette": {
-		"dont-discover": ["acme/migrations"]
-	}
+    "nette": {
+        "dont-discover": ["acme/migrations"]
+    }
 }
 ```
 
@@ -107,10 +107,10 @@ Configuration
 
 ```neon
 netteConsole:
-	stubs: %rootDir%/stubs          # application stubs override package ones (command.stub, ...)
-	commands:
-		namespace: App\Console
-		directory: %appDir%/Console
+    stubs: %rootDir%/stubs          # application stubs override package ones (command.stub, ...)
+    commands:
+        namespace: App\Console
+        directory: %appDir%/Console
 ```
 
 
@@ -125,4 +125,4 @@ DI container cache is invalidated so new classes found by `search` are registere
 Checks
 ------
 
-	composer run ci:check    # PHPStan level 8 + Nette Tester
+    composer run ci:check    # PHPStan level 8 + Nette Tester
